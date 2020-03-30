@@ -7,10 +7,12 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 // import custom components
 import Courses from './components/Courses';
+import CourseDetail from './components/CourseDetail';
 import Head from './components/Head';
 
 function App() {
   return (
+      <BrowserRouter>
         <div id="root">
           <Head />
           <div>
@@ -22,7 +24,8 @@ function App() {
             </div>
             <Courses />
           </div>
-        </div> 
+        </div>
+      </BrowserRouter> 
   );
 }
 

@@ -1,4 +1,7 @@
+// import react, component, route and navlink
 import React, { Component } from 'react';
+import { Route, NavLink } from 'react-router-dom';
+
 import axios from 'axios'; // import axios for use of calling API
 
 export default class Courses extends Component {
