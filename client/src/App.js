@@ -3,7 +3,7 @@ import './global.css';
 
 // Import default components and 3rd party libraries
 import React, { PureComponent } from 'react';
-import { BrowserRouter, Route, Switch} from 'react-router-dom';
+import { BrowserRouter, Router, Route, Switch} from 'react-router-dom';
 
 // import custom components
 import Courses from './components/Courses';
@@ -22,7 +22,10 @@ function App() {
                 <nav><a className="signup" href="sign-up.html">Sign Up</a><a className="signin" href="sign-in.html">Sign In</a></nav>
               </div>
             </div>
-            <Courses />
+              <Switch>
+                <Route exact path="/" component={Courses}/>
+                <Route path="/api/courses/:id" component={CourseDetail}/>
+              </Switch>
           </div>
         </div>
       </BrowserRouter> 
