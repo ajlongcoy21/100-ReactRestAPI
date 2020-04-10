@@ -2,34 +2,44 @@
 import './global.css';
 
 // Import default components and 3rd party libraries
-import React, { PureComponent } from 'react';
-import { BrowserRouter, Router, Route, Switch} from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
+
 
 // import custom components
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
+import UserSignIn from './components/UserSignIn';
 import Head from './components/Head';
+import Header from './components/Header';
+
+//Import Context
+import {UserContext} from './components/UserContext';
 
 function App() {
+
+  const originalUser = useContext(UserContext);
+  const [user, modifyUser] = useState(originalUser);
+
   return (
       <BrowserRouter>
         <div id="root">
           <Head />
           <div>
-            <div className="header">
-              <div className="bounds">
-                <h1 className="header--logo">Courses</h1>
-                <nav><a className="signup" href="sign-up.html">Sign Up</a><a className="signin" href="sign-in.html">Sign In</a></nav>
-              </div>
-            </div>
+            <UserContext.Provider value={ {user, modifyUser} }>
+              <Header />
               <Switch>
                 <Route exact path="/" component={Courses}/>
                 <Route path="/api/courses/:id" component={CourseDetail}/>
+                <Route path="/api/signin" component={UserSignIn}/>
               </Switch>
+            </UserContext.Provider>
           </div>
         </div>
-      </BrowserRouter> 
+      </BrowserRouter>
   );
 }
+
+
 
 export default App;

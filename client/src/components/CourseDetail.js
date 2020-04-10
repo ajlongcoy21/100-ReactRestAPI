@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios'; // import axios for use of calling API
 import { Link } from 'react-router-dom';
 
+// Get the user context
+import {UserContext} from './UserContext';
+
 export default class CourseDetail extends Component {
 
     // Constructor to receive props
@@ -108,3 +111,5 @@ export default class CourseDetail extends Component {
         }
     }
 }
+
+CourseDetail.contextType = UserContext;

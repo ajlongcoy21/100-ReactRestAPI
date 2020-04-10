@@ -1,6 +1,6 @@
 // import react, component, route and navlink
 import React, { Component } from 'react';
-import { Switch, Route, NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import axios from 'axios'; // import axios for use of calling API
 
