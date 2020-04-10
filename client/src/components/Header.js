@@ -15,7 +15,7 @@ const Header = () => {
             <div className="header">
                 <div className="bounds">
                     <h1 className="header--logo">Courses</h1>
-                    <nav><span>Welcome Joe Smith!</span><Link className="signout" to="/">Sign Out</Link></nav>
+                    <nav><span>Welcome {user.user.firstName} {user.user.lastName}!</span><Link className="signout" to="/api/signout">Sign Out</Link></nav>
                 </div>
             </div> 
         );

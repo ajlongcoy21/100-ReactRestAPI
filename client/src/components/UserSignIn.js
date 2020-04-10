@@ -58,10 +58,7 @@ export default class UserSignIn extends Component {
     }
 
     signIn(email, password)
-    {
-        console.log('email: ', email);
-        console.log('password: ', password);
-        
+    {   
         // Make a call to the api for the specific user
         axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
         .then(response => {
