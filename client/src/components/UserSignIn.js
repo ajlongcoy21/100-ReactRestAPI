@@ -20,7 +20,8 @@ export default class UserSignIn extends Component {
             redirect: false,
             email: null,
             password: null,
-            isLoggedIn: false
+            isLoggedIn: false,
+            validationMessages: []
         }
 
         // bind handle submit function
@@ -59,6 +60,8 @@ export default class UserSignIn extends Component {
 
     signIn(email, password)
     {
+        var self = this;
+        let consolidatedErrorMessages = [];
    
         // Make a call to the api for the specific user
         axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
@@ -66,14 +69,50 @@ export default class UserSignIn extends Component {
             
             // Set the state on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
+
+            this.setState({
+                isLoaded: true,         // data is loaded
+                validationMessages: []
+                }); 
             
         })
         .catch(error => { 
 
+            if (error.response) 
+              {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                
+                console.log('here now with errors: ');
+                console.log(error.response);
+
+                consolidatedErrorMessages.push(error.response.data.message);  
+                console.log(consolidatedErrorMessages);
+                  
+                
+                self.setState({validationMessages: consolidatedErrorMessages});
+
+                //console.log(error.response.status);
+                //console.log(error.response.headers);
+              } 
+              else if (error.request) 
+              {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+              } 
+              else 
+              {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+              }
+
+              console.log(error.config);  
+
             // Error occured during request
             this.setState({
                 isLoaded: true,         // data is loaded
-                error                   // set the error state variable
                 }); 
         })
     }
@@ -115,6 +154,42 @@ export default class UserSignIn extends Component {
             {
                 return <Redirect to='/'/>;
             } 
+            else if (this.state.validationMessages.length > 0)
+            {
+                return (
+
+                    <div className="bounds">
+                      <div className="grid-33 centered signin">
+                          <h1>Sign In</h1>
+                          <div>
+                          <div>
+                            <h2 class="validation--errors--label">Validation errors</h2>
+                                <div class="validation-errors">
+                                    <ul>
+                                        {this.state.validationMessages.map(function(message, index){return <li key={ index }>{message.replace('Validation error: ', '')}</li>;})}
+                                    </ul>
+                                    </div>
+                                </div>
+                              <form onSubmit={this.handleSubmit}>
+                                  <div>
+                                      <input id="emailAddress" name="email" type="text" className="" placeholder="Email Address" value={this.state.email} onChange={this.handleInputChange}/>
+                                  </div>
+                                  <div>
+                                      <input id="password" name="password" type="password" className="" placeholder="Password" value={this.state.password} onChange={this.handleInputChange}/>
+                                  </div>
+                                  <div className="grid-100 pad-bottom">
+                                      <input className="button" type="submit" value="Sign In" />
+                                      <input className="button button-secondary" type="button" value="Cancel" onClick={this.handleClick} />
+                                  </div>
+                              </form>
+                          </div>
+                          <p>&nbsp;</p>
+                          <p>Don't have a user account? <Link to="/api/signup">Click here</Link> to sign up!</p>
+                      </div>
+                    </div>
+                    
+                  );
+            }
             else 
             {
                 return (
