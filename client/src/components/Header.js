@@ -26,7 +26,7 @@ const Header = () => {
             <div className="header">
                 <div className="bounds">
                     <h1 className="header--logo">Courses</h1>
-                    <nav><a className="signup" href="sign-up.html">Sign Up</a><Link className="signin" to='/api/signIn'>Sign In</Link></nav>
+                    <nav><Link className="signup" to="/api/signup">Sign Up</Link><Link className="signin" to='/api/signin'>Sign In</Link></nav>
                 </div>
         </div>
         );

@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'; // import axios for use of calling API
 import { Link, Redirect } from 'react-router-dom';
 
-// Get the user context
-import {UserContext} from './UserContext';
-
-export default class UserSignIn extends Component {
+export default class UserSignUp extends Component {
 
     // Constructor to receive props
 
@@ -18,9 +15,11 @@ export default class UserSignIn extends Component {
             error: null,
             isLoaded: false,
             redirect: false,
-            email: null,
-            password: null,
-            isLoggedIn: false
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
         }
 
         // bind handle submit function
@@ -34,10 +33,7 @@ export default class UserSignIn extends Component {
     componentDidMount() 
     {           
         this.setState({ 
-            isLoaded: true,                          // data is loaded boolean
-            email: this.context.user.email,          // set the email string
-            password: this.context.user.password,    // set the password string
-            isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
+            isLoaded: true   // data is loaded boolean
         }); 
         
     }
@@ -51,31 +47,16 @@ export default class UserSignIn extends Component {
         } 
         else 
         {
-            this.signIn(this.state.email, this.state.password);
+            this.signIn();
         }
 
         event.preventDefault();
     }
 
-    signIn(email, password)
+    signIn()
     {
    
-        // Make a call to the api for the specific user
-        axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
-        .then(response => {
-            
-            // Set the state on successful return of user data
-            this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
-            
-        })
-        .catch(error => { 
 
-            // Error occured during request
-            this.setState({
-                isLoaded: true,         // data is loaded
-                error                   // set the error state variable
-                }); 
-        })
     }
 
     handleInputChange(event) 
@@ -121,31 +102,36 @@ export default class UserSignIn extends Component {
 
                     <div className="bounds">
                       <div className="grid-33 centered signin">
-                          <h1>Sign In</h1>
+                          <h1>Sign Up</h1>
                           <div>
                               <form onSubmit={this.handleSubmit}>
                                   <div>
-                                      <input id="emailAddress" name="email" type="text" className="" placeholder="Email Address" value={this.state.email} onChange={this.handleInputChange}/>
+                                      <input id="firstName" name="firstName" type="text" className="" placeholder="First Name" value={this.state.firstName} onChange={this.handleInputChange}/>
                                   </div>
                                   <div>
-                                      <input id="password" name="password" type="password" className="" placeholder="Password" value={this.state.password} onChange={this.handleInputChange}/>
+                                    <input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" value={this.state.lastName} onChange={this.handleInputChange}/>
+                                  </div>
+                                  <div>
+                                    <input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" value={this.state.emailAddress} onChange={this.handleInputChange}/>
+                                  </div>
+                                  <div>
+                                    <input id="password" name="password" type="password" className="" placeholder="Password" value={this.state.password} onChange={this.handleInputChange}/>
+                                  </div>
+                                  <div>
+                                    <input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={this.handleInputChange}/>
                                   </div>
                                   <div className="grid-100 pad-bottom">
-                                      <input className="button" type="submit" value="Sign In" />
+                                      <input className="button" type="submit" value="Sign Up" />
                                       <input className="button button-secondary" type="button" value="Cancel" onClick={this.handleClick} />
                                   </div>
                               </form>
                           </div>
                           <p>&nbsp;</p>
-                          <p>Don't have a user account? <Link to="/api/signup">Click here</Link> to sign up!</p>
+                          <p>Already have a user account? <Link to="/api/signin">Click here</Link> to sign in!</p>
                       </div>
                     </div>
-                    
                   );
-            }
-            
+            }  
         }
     }
 }
-
-UserSignIn.contextType = UserContext;
