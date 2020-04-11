@@ -33,7 +33,7 @@ export default class Courses extends Component {
             // Error occured during request
             this.setState({
                 isLoaded: true,         // data is loaded
-                error                   // set the error state variable
+                error: error                   // set the error state variable
                 }); 
         })
     }
@@ -62,12 +62,12 @@ export default class Courses extends Component {
                         <h3 className="course--title">{course.title}</h3>
                     </Link></div>
                 ))}
-                <div className="grid-33"><NavLink activeClassName="course--module course--add--module" to="">
+                <div className="grid-33" key={999999999999}><Link className="course--module course--add--module" to={`/courses/create`}>
                     <h3 className="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                         viewBox="0 0 13 13" className="add">
                         <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
                     </svg>New Course</h3>
-                </NavLink></div>
+                </Link></div>
               </div>
             );
         }

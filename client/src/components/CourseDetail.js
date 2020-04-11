@@ -34,6 +34,9 @@ export default class CourseDetail extends Component {
                 isLoaded: true,              // data is loaded
                 course: response.data      // set the courses state variable to the course array
             });
+
+            console.log(response.data);
+            
         })
         .catch(error => { 
 

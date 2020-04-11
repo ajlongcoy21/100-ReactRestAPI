@@ -161,6 +161,9 @@ router.post('/api/courses', authenticateUser, asyncHandler( async (req, res) => 
   // Get the course from the request body.
   const courseToCreate = req.body;
 
+  console.log(courseToCreate);
+  
+
   try 
   {
     // try to create the course and add the course to the course table.
@@ -169,8 +172,8 @@ router.post('/api/courses', authenticateUser, asyncHandler( async (req, res) => 
         userId: req.currentUser.id,
         title: courseToCreate.title,
         description: courseToCreate.description,
-        estimatedTime: (!courseToCreate.estimatedTime) ? courseToCreate.estimatedTime : null,
-        materialsNeeded: (!courseToCreate.materialsNeeded) ? courseToCreate.materialsNeeded : null
+        estimatedTime: (courseToCreate.estimatedTime) ? courseToCreate.estimatedTime : null,
+        materialsNeeded: (courseToCreate.materialsNeeded) ? courseToCreate.materialsNeeded : null
       }
     );
 
