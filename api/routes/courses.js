@@ -271,7 +271,7 @@ router.put('/api/courses/:id', authenticateUser, [
       else 
       {
         // create custom error for an unauthorized update
-        let myError = new Error(`You are not allowed to update the course: ${req.params.id}.`);
+        let myError = new Error(`You are not allowed to update the course: ${course.dataValues.title}.`);
         myError.status = 403;
         throw myError; 
       }

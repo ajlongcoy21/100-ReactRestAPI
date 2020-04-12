@@ -17,6 +17,7 @@ import UserSignUp from './components/UserSignUp';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
 import CreateCourse from './components/CreateCourse';
+import UpdateCourse from './components/UpdateCourse';
 
 //Import Context
 import {UserContext} from './components/UserContext';
@@ -36,6 +37,7 @@ function App() {
               <Switch>
                 <Route exact path="/" component={Courses}/>
                 <Route path="/api/courses/:id" component={CourseDetail}/>
+                <Route path="/courses/:id/update" component={UpdateCourse}/>
                 <Route path="/courses/create" component={CreateCourse}/>
                 <Route path="/api/signin" component={UserSignIn}/>
                 <Route path="/api/signup" component={UserSignUp}/>
