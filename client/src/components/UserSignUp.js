@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'; // import axios for use of calling API
 import { Link, Redirect } from 'react-router-dom';
+import cookie from 'react-cookies'
 
 // Get the user context
 import {UserContext} from './UserContext';
@@ -69,9 +70,11 @@ export default class UserSignUp extends Component {
         if (password !== confirmPassword) 
         {
             consolidatedErrorMessages.push('Passwords do not match.');
+            self.setState({validationMessages: consolidatedErrorMessages});
         }
-
-        axios.post(`http://localhost:5000/api/users`, { firstName: firstName, lastName: lastName, emailAddress: emailAddress, password: password })
+        else
+        {
+          axios.post(`http://localhost:5000/api/users`, { firstName: firstName, lastName: lastName, emailAddress: emailAddress, password: password })
           .then(function (response) 
           {
             console.log('in response');
@@ -117,29 +120,56 @@ export default class UserSignUp extends Component {
               console.log(error.config);  
                     
           });
-
+        }
     }
 
     signIn(email, password)
     {
    
+      var self = this;
+        let seperatedErrorMessages = [];
+        let consolidatedErrorMessages = [];
+
         // Make a call to the api for the specific user
         axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
         .then(response => {
             
             // Set the state on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
+            cookie.save('email', response.data.emailAddress, { path: '/' });
+            cookie.save('password', password, { path: '/' });
+            cookie.save('user', response.data, {path: '/'});
+            cookie.save('isLoggedIn', true, {path: '/'}); 
             this.props.history.goBack();
             
         })
         .catch(error => { 
 
-            // Error occured during request
-            this.setState({
-                isLoaded: true,         // data is loaded
-                redirect: false,
-                error: error            // set the error state variable
-                }); 
+          if (error.response) 
+          {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              
+              if (error.response.status === 500) 
+              {
+                  self.setState({error: true});
+              }
+          } 
+          else if (error.request) 
+          {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+          } 
+          else 
+          {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+          }
+
+          console.log(error.config); 
+
         })
     }
 
@@ -167,7 +197,7 @@ export default class UserSignUp extends Component {
 
         if (error) 
         {
-            return <div>Error: {error.message}</div>;
+          return <Redirect to='/error'/>;
         } 
         else if (!isLoaded) 
         {

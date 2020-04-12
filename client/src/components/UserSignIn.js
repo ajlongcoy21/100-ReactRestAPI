@@ -100,6 +100,11 @@ export default class UserSignIn extends Component {
                 
                 self.setState({validationMessages: consolidatedErrorMessages});
 
+                if (error.response.status === 500) 
+                {
+                    self.setState({error: true});
+                }
+
                 //console.log(error.response.status);
                 //console.log(error.response.headers);
               } 
@@ -149,7 +154,7 @@ export default class UserSignIn extends Component {
 
         if (error) 
         {
-            return <div>Error: {error.message}</div>;
+            return <Redirect to='/error'/>;
         } 
         else if (!isLoaded) 
         {

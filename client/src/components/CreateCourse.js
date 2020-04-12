@@ -93,8 +93,11 @@ export default class CreateCourse extends Component {
                 console.log(response);
                 console.log(response.message);
                 
+                self.setState({redirect: true});
             })
-            .catch(function (error) {
+            .catch(function (error) 
+            {
+                
                 if (error.response) 
                 {
                     // The request was made and the server responded with a status code
@@ -107,9 +110,11 @@ export default class CreateCourse extends Component {
                     }
 
                     self.setState({validationMessages: consolidatedErrorMessages});
-
-                    console.log(consolidatedErrorMessages.length);
-                    console.log(consolidatedErrorMessages);
+                    
+                    if (error.response.status === 500) 
+                    {
+                        self.setState({error: true});
+                    }
                                     
                     
                     //console.log(error.response.status);
@@ -163,10 +168,8 @@ export default class CreateCourse extends Component {
         const { error, isLoaded, redirect, redirectSignIn } = this.state;
 
         if (error) 
-        {
-            console.log('how here now?');
-            
-            return <div>Error: {error.message}</div>;
+        {        
+            return <Redirect to='/error'/>;
         } 
         else if (!isLoaded) 
         {

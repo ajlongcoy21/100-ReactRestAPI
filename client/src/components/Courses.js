@@ -1,6 +1,6 @@
 // import react, component, route and navlink
 import React, { Component } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import axios from 'axios'; // import axios for use of calling API
 
@@ -18,6 +18,10 @@ export default class Courses extends Component {
 
     componentDidMount() 
     {
+        var self = this;
+        let seperatedErrorMessages = [];
+        let consolidatedErrorMessages = [];
+
         // Make a call to the api for the complete list of courses
         axios.get(`http://localhost:5000/api/courses`)
         .then(response => {
@@ -30,11 +34,30 @@ export default class Courses extends Component {
         })
         .catch(error => { 
 
-            // Error occured during request
-            this.setState({
-                isLoaded: true,         // data is loaded
-                error: error                   // set the error state variable
-                }); 
+            if (error.response) 
+                {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    
+                    if (error.response.status === 500) 
+                    {
+                        self.setState({error: true});
+                    }
+                } 
+                else if (error.request) 
+                {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } 
+                else 
+                {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+
+                console.log(error.config); 
         })
     }
 
@@ -46,7 +69,7 @@ export default class Courses extends Component {
 
         if (error) 
         {
-            return <div>Error: {error.message}</div>;
+            return <Redirect to='/error'/>;
         } 
         else if (!isLoaded) 
         {

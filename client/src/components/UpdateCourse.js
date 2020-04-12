@@ -114,7 +114,11 @@ export default class CreateCourse extends Component {
                     console.log(consolidatedErrorMessages.length);
                     console.log(consolidatedErrorMessages);
                                     
-                    
+                    if (error.response.status === 500) 
+                    {
+                        self.setState({error: true});
+                    }
+
                     //console.log(error.response.status);
                     //console.log(error.response.headers);
                 } 
@@ -177,6 +181,8 @@ export default class CreateCourse extends Component {
                 console.log('in response');
                 console.log(response);
                 console.log(response.message);
+
+                self.setState({redirect: true});
                 
             })
             .catch(function (error) {
@@ -196,6 +202,10 @@ export default class CreateCourse extends Component {
                     console.log(consolidatedErrorMessages.length);
                     console.log(consolidatedErrorMessages);
                                     
+                    if (error.response.status === 500) 
+                    {
+                        self.setState({error: true});
+                    }
                     
                     //console.log(error.response.status);
                     //console.log(error.response.headers);
@@ -267,10 +277,8 @@ export default class CreateCourse extends Component {
         
 
         if (error) 
-        {
-            console.log('how here now?');
-            
-            return <div>Error: {error.message}</div>;
+        {   
+            return <Redirect to='/error'/>;
         } 
         else if (!isLoaded) 
         {
