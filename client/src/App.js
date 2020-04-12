@@ -20,6 +20,7 @@ import UpdateCourse from './components/UpdateCourse';
 
 import Forbidden from './components/Forbidden';
 import NotFound from './components/NotFound';
+import ErrorPage from './components/ErrorPage';
 
 //Import Context
 import {UserContext} from './components/UserContext';
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/signin" component={UserSignIn}/>
                 <Route path="/signup" component={UserSignUp}/>
                 <Route path="/signout" component={UserSignOut}/>
+                <Route path="/error" component={ErrorPage}/>
                 <Route path="/forbidden" component={Forbidden}/>
                 <Route path="/notfound" component={NotFound}/>
                 <Route component={NotFound}/>
