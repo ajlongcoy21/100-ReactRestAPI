@@ -17,6 +17,7 @@ export default class CreateCourse extends Component {
         this.state = {
             error: null,
             isLoaded: false,
+            redirectSignIn: false,
             redirect: false,
             title: "",
             description: "",
@@ -36,11 +37,24 @@ export default class CreateCourse extends Component {
     // Component Did Mount - set the state
 
     componentDidMount() 
-    {           
-        this.setState({ 
-            isLoaded: true,   // data is loaded boolean
-            isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
-        }); 
+    {          
+        if (this.context.user.isLoggedIn)
+        {
+            this.setState({ 
+                isLoaded: true,   // data is loaded boolean
+                isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
+            }); 
+        } 
+        else
+        {
+            this.setState({ 
+                isLoaded: true,   // data is loaded boolean
+                redirectSignIn: true
+            }); 
+
+            this.props.history.push(this.props.history.location.pathname);
+        }
+        
         
     }
 
@@ -146,7 +160,7 @@ export default class CreateCourse extends Component {
 
     render() { 
 
-        const { error, isLoaded, redirect } = this.state;
+        const { error, isLoaded, redirect, redirectSignIn } = this.state;
 
         if (error) 
         {
@@ -160,6 +174,11 @@ export default class CreateCourse extends Component {
         } 
         else 
         {
+
+            if (redirectSignIn) 
+            {
+                return <Redirect to='/signin'/>;
+            }
 
             if (redirect) 
             {

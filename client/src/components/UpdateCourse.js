@@ -189,6 +189,10 @@ export default class CreateCourse extends Component {
         this.setState({ redirect: true });        
     }
 
+    EditingButtons(props)
+    {
+
+    }
     // render the component
 
     render() { 

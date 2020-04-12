@@ -19,25 +19,51 @@ export default class CourseDetail extends Component {
             isLoaded: false,
             redirect: false,
             course: null,
+            isCourseUser: false,
             validationMessages: []
         }
 
         this.deleteCourse = this.deleteCourse.bind(this);
+        //this.editButtons = this.editButtons(this);
     }
 
     // Component Did Mount - fetch the data from the API
 
     componentDidMount() 
-    {        
+    {       
         // Make a call to the api for the specific course
         axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
         .then(response => {
+            
+            if (this.context.user.user !== null) 
+            {
 
-            // Set the state on successful return of course data
-            this.setState({
-                isLoaded: true,              // data is loaded
-                course: response.data      // set the courses state variable to the course array
-            });
+                if (this.context.user.user.id === response.data.User.id) 
+                {
+                    // Set the state on successful return of course data
+                    this.setState({
+                        isLoaded: true,              // data is loaded
+                        course: response.data,      // set the courses state variable to the course array
+                        isCourseUser: true
+                    });
+                } 
+                else 
+                {
+                    // Set the state on successful return of course data
+                    this.setState({
+                        isLoaded: true,              // data is loaded
+                        course: response.data      // set the courses state variable to the course array
+                    });
+                }
+            }
+            else 
+            {
+                // Set the state on successful return of course data
+                this.setState({
+                    isLoaded: true,              // data is loaded
+                    course: response.data      // set the courses state variable to the course array
+                });
+            }
 
             console.log(response.data);
             
@@ -113,6 +139,16 @@ export default class CourseDetail extends Component {
         })
     }
 
+    editButtons(props)
+    {
+        if (props.isUser) 
+        {
+            return <span><Link className="button" to={`/courses/${props.state.course.id}/update`}>Update Course</Link><Link className="button" to=' ' onClick={props.deleteFunction}>Delete Course</Link></span>;
+        } 
+
+        return <span></span>;
+    }
+
     // render the component
 
     render() { 
@@ -149,7 +185,7 @@ export default class CourseDetail extends Component {
               <div>
                 <div className="actions--bar">
                     <div className="bounds">
-                        <div className="grid-100"><span><Link className="button" to={`/courses/${this.state.course.id}/update`}>Update Course</Link><Link className="button" to=' ' onClick={this.deleteCourse}>Delete Course</Link></span><Link className="button button-secondary" to="/">Return to List</Link></div>
+                        <div className="grid-100"><this.editButtons isUser={this.state.isCourseUser} state={this.state} deleteFunction={this.deleteCourse}/><Link className="button button-secondary" to="/">Return to List</Link></div>
                     </div>
                 </div>
                 <div className="bounds course--detail">
