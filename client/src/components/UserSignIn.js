@@ -70,8 +70,11 @@ export default class UserSignIn extends Component {
             // Set the state on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
 
+            this.props.history.goBack();
+
             this.setState({
                 isLoaded: true,         // data is loaded
+                redirect: false,
                 validationMessages: []
                 }); 
             
