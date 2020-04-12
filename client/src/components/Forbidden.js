@@ -1,9 +1,6 @@
 // Import react
 import React, {useContext} from "react";
-//import { Link } from 'react-router-dom';
-
-// Get the user context
-//import {UserContext} from './UserContext';
+import { Link } from 'react-router-dom';
 
 const Forbidden = () => {
 
@@ -14,6 +11,7 @@ const Forbidden = () => {
             <div className="bounds">
                 <h1>Forbidden</h1>
                 <p>Oh oh! You can't access this page.</p>
+                <p>Go back to main page: <Link to="/">Click Here</Link></p>
             </div>
         );
     
