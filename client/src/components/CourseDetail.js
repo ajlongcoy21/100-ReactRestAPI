@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'; // import axios for use of calling API
 import { Link, Redirect } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 // Get the user context
 import {UserContext} from './UserContext';
@@ -222,6 +223,8 @@ export default class CourseDetail extends Component {
                 course.estimatedTime = "N/A"
             }
 
+            const inputDescription = `\n${course.description}`;
+            const inputMaterialsNeeded = `#### Materials Needed \n${course.materialsNeeded}`;
             return (
 
               <div>
@@ -238,7 +241,7 @@ export default class CourseDetail extends Component {
                             <p>By {course.User.firstName} {course.User.lastName}</p>
                         </div>
                         <div className="course--description">
-                            <p>{course.description}</p>
+                            <ReactMarkdown source={inputDescription} />
                         </div>
                     </div>
                     <div className="grid-25 grid-right">
@@ -249,8 +252,8 @@ export default class CourseDetail extends Component {
                                     <h3>{course.estimatedTime}</h3>
                                 </li>
                                 <li className="course--stats--list--item">
-                                    <h4>Materials Needed</h4>
-                                    <ul> { course.materialsNeeded.split(/\r?\n/).map( (material, index) => ( <li key={index}>{material}</li> ))} </ul>
+                                    
+                                    <ReactMarkdown source={inputMaterialsNeeded} />
                                 </li>
                             </ul>
                         </div>
@@ -262,5 +265,9 @@ export default class CourseDetail extends Component {
         }
     }
 }
+
+{/* 
+    <h4>Materials Needed</h4>
+<ul> { course.materialsNeeded.split(/\r?\n/).map( (material, index) => ( <li key={index}>{material}</li> ))} </ul> */}
 
 CourseDetail.contextType = UserContext;
