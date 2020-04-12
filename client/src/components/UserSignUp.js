@@ -217,7 +217,7 @@ export default class UserSignUp extends Component {
                               </form>
                           </div>
                           <p>&nbsp;</p>
-                          <p>Already have a user account? <Link to="/api/signin">Click here</Link> to sign in!</p>
+                          <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
                       </div>
                     </div>
                   );
@@ -253,7 +253,7 @@ export default class UserSignUp extends Component {
                               </form>
                           </div>
                           <p>&nbsp;</p>
-                          <p>Already have a user account? <Link to="/api/signin">Click here</Link> to sign in!</p>
+                          <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
                       </div>
                     </div>
                   );

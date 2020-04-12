@@ -327,7 +327,7 @@ router.delete('/api/courses/:id', authenticateUser, asyncHandler( async (req, re
         else 
         {
           // create custom error for unauthorized deletion
-          let myError = new Error(`You are not allowed to delete the course: ${req.params.id}.`);
+          let myError = new Error(`You are not allowed to delete the course: ${course.dataValues.title}.`);
           myError.status = 403;
           throw myError; 
         }

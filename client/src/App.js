@@ -36,12 +36,12 @@ function App() {
               <Header />
               <Switch>
                 <Route exact path="/" component={Courses}/>
-                <Route path="/api/courses/:id" component={CourseDetail}/>
-                <Route path="/courses/:id/update" component={UpdateCourse}/>
                 <Route path="/courses/create" component={CreateCourse}/>
-                <Route path="/api/signin" component={UserSignIn}/>
-                <Route path="/api/signup" component={UserSignUp}/>
-                <Route path="/api/signout" component={UserSignOut}/>
+                <Route path="/courses/:id/update" component={UpdateCourse}/>
+                <Route path="/courses/:id" component={CourseDetail}/>
+                <Route path="/signin" component={UserSignIn}/>
+                <Route path="/signup" component={UserSignUp}/>
+                <Route path="/signout" component={UserSignOut}/>
               </Switch>
             </UserContext.Provider>
           </div>
