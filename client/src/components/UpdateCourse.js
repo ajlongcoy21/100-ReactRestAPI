@@ -19,6 +19,7 @@ export default class CreateCourse extends Component {
             isLoaded: false,
             redirect: false,
             forbidden: false,
+            notFound: false,
             course: null,
             courseUserFirstName: "",
             courseUserLastName: "",
@@ -42,6 +43,10 @@ export default class CreateCourse extends Component {
 
     componentDidMount() 
     {       
+        var self = this;
+        let seperatedErrorMessages = [];
+        let consolidatedErrorMessages = [];
+
         // Make a call to the api for the specific course
         axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
         .then(response => {
@@ -95,11 +100,38 @@ export default class CreateCourse extends Component {
         })
         .catch(error => { 
 
-            // Error occured during request
-            this.setState({
-                isLoaded: true,         // data is loaded
-                error                   // set the error state variable
-                }); 
+            if (error.response) 
+                {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    seperatedErrorMessages = error.response.data.message.split(/(,\n)/);
+
+                    if (error.response.data.message === 'Course not found. Please search for another course.')
+                    {
+                        self.setState({isLoaded: true, notFound: true, validationMessages: consolidatedErrorMessages});
+                    }
+
+                    console.log(consolidatedErrorMessages.length);
+                    console.log(consolidatedErrorMessages);
+                                    
+                    
+                    //console.log(error.response.status);
+                    //console.log(error.response.headers);
+                } 
+                else if (error.request) 
+                {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } 
+                else 
+                {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+
+                console.log(error.config); 
         })
 
         this.setState({ 
@@ -229,7 +261,7 @@ export default class CreateCourse extends Component {
 
     render() { 
 
-        const { error, isLoaded, redirect, forbidden } = this.state;
+        const { error, isLoaded, redirect, forbidden, notFound } = this.state;
 
         console.log(this.state.course);
         
@@ -247,6 +279,10 @@ export default class CreateCourse extends Component {
         else 
         {
 
+            if (notFound) 
+            {
+                return <Redirect to='/notfound'/>;
+            } 
             if (forbidden) 
             {
                 return <Redirect to='/forbidden'/>;

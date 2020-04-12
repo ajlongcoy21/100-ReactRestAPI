@@ -280,7 +280,7 @@ router.put('/api/courses/:id', authenticateUser, [
     else 
     {
       // create custom error for a course not found
-      let myError = new Error(`Course not found, course: ${req.params.id}. Please search for another course.`);
+      let myError = new Error(`Course not found. Please search for another course.`);
       myError.status = 400;
       throw myError; 
     }
