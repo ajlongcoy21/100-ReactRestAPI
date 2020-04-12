@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'; // import axios for use of calling API
 import { Link, Redirect } from 'react-router-dom';
+import cookie from 'react-cookies'
 
 // Get the user context
 import {UserContext} from './UserContext';
@@ -36,8 +37,8 @@ export default class UserSignIn extends Component {
     {           
         this.setState({ 
             isLoaded: true,                          // data is loaded boolean
-            email: this.context.user.email,          // set the email string
-            password: this.context.user.password,    // set the password string
+            email: this.context.user.email,             // set the email string
+            password: this.context.user.password,       // set the password string
             isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
         }); 
         
@@ -69,6 +70,10 @@ export default class UserSignIn extends Component {
             
             // Set the state on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
+            cookie.save('email', response.data.emailAddress, { path: '/' });
+            cookie.save('password', password, { path: '/' });
+            cookie.save('user', response.data, {path: '/'});
+            cookie.save('isLoggedIn', true, {path: '/'});            
 
             this.props.history.goBack();
 

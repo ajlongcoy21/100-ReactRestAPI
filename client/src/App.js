@@ -5,7 +5,6 @@ import './global.css';
 import React, { useState, useContext } from 'react';
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
-
 // import custom components
 import Head from './components/Head';
 import Header from './components/Header';
