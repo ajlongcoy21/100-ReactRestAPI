@@ -18,6 +18,7 @@ export default class CreateCourse extends Component {
             error: null,
             isLoaded: false,
             redirect: false,
+            forbidden: false,
             course: null,
             courseUserFirstName: "",
             courseUserLastName: "",
@@ -57,6 +58,37 @@ export default class CreateCourse extends Component {
                 estimatedTime: (response.data.estimatedTime) ? response.data.estimatedTime : "",
                 materialsNeeded: (response.data.materialsNeeded) ? response.data.materialsNeeded : ""
             });
+
+            if (this.context.user.user !== null) 
+            {
+                if (this.context.user.user.id === response.data.User.id)
+                {
+                    // Set the state on successful return of course data
+                    this.setState({
+                        isLoaded: true,              // data is loaded
+                        course: response.data,      // set the courses state variable to the course array
+                        forbidden: false
+                    });
+                }
+                else
+                {
+                    // Set the state on successful return of course data
+                    this.setState({
+                        isLoaded: true,              // data is loaded
+                        course: response.data,      // set the courses state variable to the course array
+                        forbidden: true
+                    });
+                }
+            }
+            else
+            {
+                // Set the state on successful return of course data
+                this.setState({
+                    isLoaded: true,              // data is loaded
+                    course: response.data,      // set the courses state variable to the course array
+                    forbidden: true
+                });
+            }
 
             console.log(response.data);
             
@@ -197,7 +229,7 @@ export default class CreateCourse extends Component {
 
     render() { 
 
-        const { error, isLoaded, redirect } = this.state;
+        const { error, isLoaded, redirect, forbidden } = this.state;
 
         console.log(this.state.course);
         
@@ -215,6 +247,10 @@ export default class CreateCourse extends Component {
         else 
         {
 
+            if (forbidden) 
+            {
+                return <Redirect to='/forbidden'/>;
+            } 
             if (redirect) 
             {
                 return <Redirect to='/'/>;

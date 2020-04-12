@@ -19,6 +19,8 @@ import CourseDetail from './components/CourseDetail';
 import CreateCourse from './components/CreateCourse';
 import UpdateCourse from './components/UpdateCourse';
 
+import Forbidden from './components/Forbidden';
+
 //Import Context
 import {UserContext} from './components/UserContext';
 
@@ -42,6 +44,7 @@ function App() {
                 <Route path="/signin" component={UserSignIn}/>
                 <Route path="/signup" component={UserSignUp}/>
                 <Route path="/signout" component={UserSignOut}/>
+                <Route path="/forbidden" component={Forbidden}/>
               </Switch>
             </UserContext.Provider>
           </div>
