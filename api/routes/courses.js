@@ -133,7 +133,7 @@ router.get('/api/courses/:id', asyncHandler( async (req, res) => {
     else 
     {
       // create custom error for an already existent account
-      let myError = new Error(`Course not found, course: ${req.params.id}. Please search for another course.`);
+      let myError = new Error(`Course not found. Please search for another course.`);
       myError.status = 400;
       throw myError; 
     }

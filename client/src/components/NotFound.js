@@ -5,18 +5,18 @@ import React, {useContext} from "react";
 // Get the user context
 //import {UserContext} from './UserContext';
 
-const Forbidden = () => {
+const NotFound = () => {
 
     //const {user} = useContext(UserContext);
    
       
         return (
             <div className="bounds">
-                <h1>Forbidden</h1>
-                <p>Oh oh! You can't access this page.</p>
+                <h1>Not Found</h1>
+                <p>Sorry! We couldn't find the page you're looking for.</p>
             </div>
         );
     
 }
 
-export default Forbidden;
+export default NotFound;
