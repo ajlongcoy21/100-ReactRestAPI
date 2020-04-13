@@ -47,8 +47,12 @@ export default class CreateCourse extends Component {
         let seperatedErrorMessages = [];
         let consolidatedErrorMessages = [];
 
+        console.log('here now');
+        console.log(this.props);
+        
+        
         // Make a call to the api for the specific course
-        axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
+        axios.get(`http://localhost:5000/api/courses/${this.props.computedMatch.params.id}`)
         .then(response => {
 
             // Set the state on successful return of course data

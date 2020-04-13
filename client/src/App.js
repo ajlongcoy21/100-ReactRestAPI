@@ -22,6 +22,8 @@ import Forbidden from './components/Forbidden';
 import NotFound from './components/NotFound';
 import ErrorPage from './components/ErrorPage';
 
+import PrivateRoute from './components/PrivateRoute';
+
 //Import Context
 import {UserContext} from './components/UserContext';
 
@@ -39,8 +41,12 @@ function App() {
               <Header />
               <Switch>
                 <Route exact path="/" component={Courses}/>
-                <Route path="/courses/create" component={CreateCourse}/>
-                <Route path="/courses/:id/update" component={UpdateCourse}/>
+                <PrivateRoute path="/courses/create">
+                  <CreateCourse />
+                </PrivateRoute>
+                <PrivateRoute path="/courses/:id/update">
+                  <UpdateCourse />
+                </PrivateRoute>
                 <Route path="/courses/:id" component={CourseDetail}/>
                 <Route path="/signin" component={UserSignIn}/>
                 <Route path="/signup" component={UserSignUp}/>
