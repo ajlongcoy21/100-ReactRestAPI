@@ -11,7 +11,7 @@ function PrivateRoute ({ children, ...rest }) {
     console.log('update ID: ');
     console.log(children);
     console.log(rest);
-    
+
     return (
         <Route {...rest} 
             render={({ location }) => 

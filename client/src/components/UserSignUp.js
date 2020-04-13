@@ -1,15 +1,24 @@
+
+// Import supporting files
 import React, { Component } from 'react';
-import axios from 'axios'; // import axios for use of calling API
-import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';                            // import axios for use of calling API
+import { Link, Redirect } from 'react-router-dom';    // import Link and Redirect for router
 import cookie from 'react-cookies'
 
 // Get the user context
 import {UserContext} from './UserContext';
 
+
+/*
+UserSignUp Component
+
+Displays the user sign up component to the user.
+
+*/
+
 export default class UserSignUp extends Component {
 
     // Constructor to receive props
-
     constructor(props)
     {
         super(props);
@@ -27,7 +36,7 @@ export default class UserSignUp extends Component {
             validationMessages: []
         }
 
-        // bind handle submit function
+        // bind functions to be able to use this
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -36,7 +45,6 @@ export default class UserSignUp extends Component {
     }
 
     // Component Did Mount - set the state
-
     componentDidMount() 
     {           
         this.setState({ 
@@ -45,45 +53,66 @@ export default class UserSignUp extends Component {
         
     }
 
-    // Handle the submit from the form
+    /*
+    handleSubmit
+
+    this function is used to handle the submit of the form. It takes the event and uses the state values for the course
+    and calls the signUp function.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
     handleSubmit(event) 
     {   
-        if (event.target.name === 'cancel') 
-        {
-            this.setState({ redirect: true });          
-        } 
-        else 
-        {
-            this.signUp(this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password, this.state.confirmPassword);
-        }
 
+        // Call the signIn function with the values from the form input
+        this.signUp(this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password, this.state.confirmPassword);
+
+        // Prevent default action
         event.preventDefault();
     }
+
+    /*
+    signUp
+
+    this function takes the submitted information and makes a request to get the user to the API.
+
+    Parameters: firstName, lastName, emailAddress, password, confirmPassword
+    Returns: N/A
+
+    */
 
     signUp (firstName, lastName, emailAddress, password, confirmPassword)
     {
 
-        var self = this;
-        let seperatedErrorMessages = [];
-        let consolidatedErrorMessages = [];
+      // Define self to get access to this for component
+      var self = this;
 
+      // Initialize error message arrays
+      let seperatedErrorMessages = [];
+      let consolidatedErrorMessages = [];
+
+      // Check to see if the password and confirmpassword match
         if (password !== confirmPassword) 
         {
             consolidatedErrorMessages.push('Passwords do not match.');
             self.setState({validationMessages: consolidatedErrorMessages});
         }
+        // If they do match
         else
         {
           axios.post(`http://localhost:5000/api/users`, { firstName: firstName, lastName: lastName, emailAddress: emailAddress, password: password })
           .then(function (response) 
           {
-            console.log('in response');
-            console.log(response);
-            console.log(response.message);
+            // call sign in function
             self.signIn(emailAddress, password);
             
           })
           .catch(function (error) {
+
+            // Check to see if the server responded with an error and response for the error
               if (error.response) 
               {
                 // The request was made and the server responded with a status code
@@ -97,12 +126,12 @@ export default class UserSignUp extends Component {
 
                 self.setState({validationMessages: consolidatedErrorMessages});
 
-                console.log(consolidatedErrorMessages.length);
-                console.log(consolidatedErrorMessages);
-                                
-                
-                //console.log(error.response.status);
-                //console.log(error.response.headers);
+                // If the server responds with a status of 500 set the error state to true for the redirect to error page
+                if (error.response.status === 500) 
+                {
+                    self.setState({error: true});
+                }
+
               } 
               else if (error.request) 
               {
@@ -123,23 +152,35 @@ export default class UserSignUp extends Component {
         }
     }
 
+    /*
+    signIn
+
+    this function takes the submitted information and makes a request to get the user to the API.
+
+    Parameters: email, password
+    Returns: N/A
+
+    */
+
     signIn(email, password)
     {
    
       var self = this;
-        let seperatedErrorMessages = [];
-        let consolidatedErrorMessages = [];
 
         // Make a call to the api for the specific user
         axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
         .then(response => {
             
-            // Set the state on successful return of user data
+            // Set the context on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
+
+            // set the cookies
             cookie.save('email', response.data.emailAddress, { path: '/' });
             cookie.save('password', password, { path: '/' });
             cookie.save('user', response.data, {path: '/'});
             cookie.save('isLoggedIn', true, {path: '/'}); 
+
+            // go back to previous page
             this.props.history.goBack();
             
         })
@@ -147,8 +188,7 @@ export default class UserSignUp extends Component {
 
           if (error.response) 
           {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
+              // If the server responds with a status of 500 set the error state to true for the redirect to error page
               
               if (error.response.status === 500) 
               {
@@ -173,16 +213,39 @@ export default class UserSignUp extends Component {
         })
     }
 
+    /*
+    handleInputChange
+
+    this function is used to log the changes in the input fields from the user. It uses the target.name and value
+    to set the state.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
     handleInputChange(event) 
     {
+      // Get values from the event target
         const target = event.target;
         const value = target.value;
         const name = target.name;
     
+        // Set corresponding state values from the taget value
         this.setState({
           [name]: value
         });
     }
+
+    /*
+    handleClick
+
+    this function is used to redirect the user to he homepage.
+
+    Parameters: N/A
+    Returns: N/A
+
+    */
 
     handleClick() 
     {   
@@ -193,23 +256,27 @@ export default class UserSignUp extends Component {
 
     render() { 
 
+      // Get necessary state variables
         const { error, isLoaded, redirect } = this.state;
 
+        // If we have the server response status of 500, redirect to error page
         if (error) 
         {
           return <Redirect to='/error'/>;
         } 
+        // If we are waiting for the data to load...notify the user
         else if (!isLoaded) 
         {
             return <div>Loading...</div>;
         } 
         else 
         {
-
+          // If the user is not signed in, redirect to signin page
             if (redirect) 
             {
                 return <Redirect to='/'/>;
             } 
+            // Check to see if there are validation errors to show in the HTML
             else if (this.state.validationMessages.length > 0)
             {
                 return (
@@ -294,4 +361,4 @@ export default class UserSignUp extends Component {
     }
 }
 
-UserSignUp.contextType = UserContext;
+UserSignUp.contextType = UserContext; // allow UserSignUp to access the context for the user signed in

@@ -1,19 +1,28 @@
+
+// Import supporting files
 import React, { Component } from 'react';
-import axios from 'axios'; // import axios for use of calling API
-import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';                     // import axios for use of calling API
+import { Redirect } from 'react-router-dom';   // import Redirect for router
 
 // Get the user context
 import {UserContext} from './UserContext';
 
+/*
+CreateCourse Component
+
+Displays the create course page to the user. If the user is logged in and authorized to update and delete the course,
+those corresponding buttons will be displayed.
+
+*/
+
 export default class CreateCourse extends Component {
 
     // Constructor to receive props
-
     constructor(props)
     {
         super(props);
 
-        // init the state of the SearchForm
+        // init the state of the CreateCourse Component
         this.state = {
             error: null,
             isLoaded: false,
@@ -27,98 +36,113 @@ export default class CreateCourse extends Component {
             validationMessages: []
         }
 
-        // bind handle submit function
+        // bind functions to be able to use this
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.createCourse = this.createCourse.bind(this);
     }
 
-    // Component Did Mount - set the state
-
+    // Component Did Mount - check the state of the user
     componentDidMount() 
-    {          
+    {
+        // Check to see if the user logged in
         if (this.context.user.isLoggedIn)
         {
+            // Set state for component to know the user is loggedIn
             this.setState({ 
-                isLoaded: true,   // data is loaded boolean
+                isLoaded: true,                          // data is loaded boolean
                 isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
             }); 
         } 
         else
         {
+            // If the user is not loggedIn, set redirectSignIn to true
             this.setState({ 
-                isLoaded: true,   // data is loaded boolean
-                redirectSignIn: true
+                isLoaded: true,        // data is loaded boolean
+                redirectSignIn: true   // redirectSignIn boolean, used to redirect ot signIn page
             }); 
 
+            // Push this location on history stack so after signing in the user will be redirect back to this page
             this.props.history.push(this.props.history.location.pathname);
         }
-        
-        
     }
 
-    // Handle the submit from the form
-    handleSubmit(event) 
-    {   
-        if (event.target.name === 'cancel') 
-        {
-            this.setState({ redirect: true });          
-        } 
-        else 
-        {
-            console.log('Title: ' + this.state.title);
-            console.log('Desc: ' + this.state.description);
-            console.log('time: ' + this.state.estimatedTime);
-            console.log('material: ' + this.state.materialsNeeded);
-            
-            this.createCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded);
-        }
+    /*
+    handleSubmit
 
+    this function is used to handle the submit of the form. It takes the event and uses the state values for the course
+    and calls the createCourse function.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
+    handleSubmit(event) 
+    {            
+        // Call the createCourse function with the values from the form input   
+        this.createCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded);
+
+        // Prevent default action
         event.preventDefault();
     }
 
+    /*
+    createCourse
+
+    this function takes the submitted information and makes a request to create the course to the API.
+    Checks to make sure the user is logged in and handles any errors returned from the API server.
+
+    Parameters: title, description, estimatedTime, materialsNeeded
+    Returns: N/A
+
+    */
+
     createCourse (title, description, estimatedTime, materialsNeeded)
     {        
+        // Define self to get access to this for component
         var self = this;
+
+        // Initialize error message arrays
         let seperatedErrorMessages = [];
         let consolidatedErrorMessages = [];
 
+        // check to make sure the user is logged in
         if (this.context.user.isLoggedIn) 
         {
+            // if the user is logged in, make a call to the API with submitted information and authorization credentials for the user
             axios.post(`http://localhost:5000/api/courses`, { userId: this.context.user.user.id, title: title, description: description, estimatedTime: estimatedTime, materialsNeeded: materialsNeeded },{ auth:{ username: this.context.user.email, password: this.context.user.password }})
             .then(function (response) 
             {
-                console.log('in response');
-                console.log(response);
-                console.log(response.message);
-                
+                // Set the redirect state to true to go back to the homepage                
                 self.setState({redirect: true});
             })
             .catch(function (error) 
             {
-                
+                // Check to see if the server responded with an error and response for the error
                 if (error.response) 
                 {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
+                    // The request was made and the server responded with a status code that is not in the range of 2xx
+
+                    // Seperate the error messages by the newline identification
                     seperatedErrorMessages = error.response.data.message.split(/(,\n)/);
 
+                    // After we seperate the messages, need to remove "bad" data such as ",\n" and store in the consolidated array
                     for (var i = 0; i < seperatedErrorMessages.length; i = i + 2) 
                     {
                         consolidatedErrorMessages.push(seperatedErrorMessages[i]);
                     }
 
+                    // Set the validationMessages in the state
                     self.setState({validationMessages: consolidatedErrorMessages});
                     
+                    // If the server responds with a status of 500 set the error state to true for the redirect to error page
                     if (error.response.status === 500) 
                     {
                         self.setState({error: true});
                     }
-                                    
-                    
-                    //console.log(error.response.status);
-                    //console.log(error.response.headers);
+
                 } 
                 else if (error.request) 
                 {
@@ -137,6 +161,7 @@ export default class CreateCourse extends Component {
                         
             });
         }
+        // if the user is not logged in let user know
         else
         {            
             consolidatedErrorMessages.push('Please login to create a course.');
@@ -145,19 +170,43 @@ export default class CreateCourse extends Component {
 
     }
 
+    /*
+    handleInputChange
+
+    this function is used to log the changes in the input fields from the user. It uses the target.name and value
+    to set the state.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
     handleInputChange(event) 
     {
+        // Get values from the event target
         const target = event.target;
         const value = target.value;
         const name = target.name;
     
+        // Set corresponding state values from the taget value
         this.setState({
           [name]: value
         });
     }
 
+    /*
+    handleClick
+
+    this function is used to redirect the user to he homepage.
+
+    Parameters: N/A
+    Returns: N/A
+
+    */
+
     handleClick() 
     {   
+        // Set redirect to true so the page redirects to homepage
         this.setState({ redirect: true });        
     }
 
@@ -165,12 +214,15 @@ export default class CreateCourse extends Component {
 
     render() { 
 
+        // Get necessary state variables
         const { error, isLoaded, redirect, redirectSignIn } = this.state;
 
+        // If we have the server response status of 500, redirect to error page
         if (error) 
         {        
             return <Redirect to='/error'/>;
         } 
+        // If we are waiting for the data to load...notify the user
         else if (!isLoaded) 
         {
             return <div>Loading...</div>;
@@ -178,15 +230,17 @@ export default class CreateCourse extends Component {
         else 
         {
 
+            // If the user is not signed in, redirect to signin page
             if (redirectSignIn) 
             {
                 return <Redirect to='/signin'/>;
             }
-
+            // If redirect is needed to hompage
             if (redirect) 
             {
                 return <Redirect to='/'/>;
             } 
+            // Check to see if there are validation errors to show in the HTML
             else if (this.state.validationMessages.length > 0)
             {
                 return (
@@ -236,6 +290,7 @@ export default class CreateCourse extends Component {
                     </div>
                   );
             }
+            // Show HTML without validation errors
             else 
             {
                 return (
@@ -281,4 +336,4 @@ export default class CreateCourse extends Component {
     }
 }
 
-CreateCourse.contextType = UserContext;
+CreateCourse.contextType = UserContext; // allow CreateCourse to access the context for the user signed in

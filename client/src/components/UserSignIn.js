@@ -1,10 +1,19 @@
+
+// Import supporting files
 import React, { Component } from 'react';
-import axios from 'axios'; // import axios for use of calling API
-import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';                           // import axios for use of calling API
+import { Link, Redirect } from 'react-router-dom';   // import Link and Redirect for router
 import cookie from 'react-cookies'
 
 // Get the user context
 import {UserContext} from './UserContext';
+
+/*
+UserSignIn Component
+
+Displays the user sign in component to the user.
+
+*/
 
 export default class UserSignIn extends Component {
 
@@ -14,7 +23,7 @@ export default class UserSignIn extends Component {
     {
         super(props);
 
-        // init the state of the SearchForm
+        // init the state of the UserSignIn Component
         this.state = {
             error: null,
             isLoaded: false,
@@ -25,58 +34,79 @@ export default class UserSignIn extends Component {
             validationMessages: []
         }
 
-        // bind handle submit function
+        // bind functions to be able to use this
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
 
     // Component Did Mount - set the state
-
     componentDidMount() 
     {           
         this.setState({ 
-            isLoaded: true,                          // data is loaded boolean
-            email: this.context.user.email,             // set the email string
-            password: this.context.user.password,       // set the password string
-            isLoggedIn: this.context.user.isLoggedIn // set the isLoggedIn boolean
+            isLoaded: true,                           // data is loaded boolean
+            email: this.context.user.email,           // set the email string
+            password: this.context.user.password,     // set the password string
+            isLoggedIn: this.context.user.isLoggedIn  // set the isLoggedIn boolean
         }); 
         
     }
 
-    // Handle the submit from the form
+    /*
+    handleSubmit
+
+    this function is used to handle the submit of the form. It takes the event and uses the state values for the course
+    and calls the signIn function.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
     handleSubmit(event) 
     {   
-        if (event.target.name === 'cancel') 
-        {
-            this.setState({ redirect: true });          
-        } 
-        else 
-        {
-            this.signIn(this.state.email, this.state.password);
-        }
+        // Call the signIn function with the values from the form input
+        this.signIn(this.state.email, this.state.password);
 
+        // Prevent default action
         event.preventDefault();
     }
 
+    /*
+    signIn
+
+    this function takes the submitted information and makes a request to get the user to the API.
+
+    Parameters: email, password
+    Returns: N/A
+
+    */
+
     signIn(email, password)
     {
+        // Define self to get access to this for component
         var self = this;
+
+        // Initialize error message arrays
         let consolidatedErrorMessages = [];
    
         // Make a call to the api for the specific user
         axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
         .then(response => {
             
-            // Set the state on successful return of user data
+            // Set the context on successful return of user data
             this.context.modifyUser({email: response.data.emailAddress, password: password, user: response.data, isLoggedIn: true});
+
+            // Set the cookie infomration
             cookie.save('email', response.data.emailAddress, { path: '/' });
             cookie.save('password', password, { path: '/' });
             cookie.save('user', response.data, {path: '/'});
             cookie.save('isLoggedIn', true, {path: '/'});            
 
+            // Go to previous page
             this.props.history.goBack();
 
+            // set the state
             this.setState({
                 isLoaded: true,         // data is loaded
                 redirect: false,
@@ -86,27 +116,19 @@ export default class UserSignIn extends Component {
         })
         .catch(error => { 
 
+            // Check to see if the server responded with an error and response for the error
             if (error.response) 
               {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                
-                console.log('here now with errors: ');
-                console.log(error.response);
 
-                consolidatedErrorMessages.push(error.response.data.message);  
-                console.log(consolidatedErrorMessages);
-                  
+                consolidatedErrorMessages.push(error.response.data.message);                    
                 
                 self.setState({validationMessages: consolidatedErrorMessages});
 
+                // If the server responds with a status of 500 set the error state to true for the redirect to error page
                 if (error.response.status === 500) 
                 {
                     self.setState({error: true});
                 }
-
-                //console.log(error.response.status);
-                //console.log(error.response.headers);
               } 
               else if (error.request) 
               {
@@ -123,23 +145,45 @@ export default class UserSignIn extends Component {
 
               console.log(error.config);  
 
-            // Error occured during request
             this.setState({
                 isLoaded: true,         // data is loaded
                 }); 
         })
     }
 
+    /*
+    handleInputChange
+
+    this function is used to log the changes in the input fields from the user. It uses the target.name and value
+    to set the state.
+
+    Parameters: event
+    Returns: N/A
+
+    */
+
     handleInputChange(event) 
     {
+        // Get values from the event target
         const target = event.target;
         const value = target.value;
         const name = target.name;
     
+        // Set corresponding state values from the taget value
         this.setState({
           [name]: value
         });
     }
+
+    /*
+    handleClick
+
+    this function is used to redirect the user to he homepage.
+
+    Parameters: N/A
+    Returns: N/A
+
+    */
 
     handleClick() 
     {   
@@ -150,12 +194,15 @@ export default class UserSignIn extends Component {
 
     render() { 
 
+        // Get necessary state variables
         const { error, isLoaded, redirect } = this.state;
 
+        // If we have the server response status of 500, redirect to error page
         if (error) 
         {
             return <Redirect to='/error'/>;
         } 
+        // If we are waiting for the data to load...notify the user
         else if (!isLoaded) 
         {
             return <div>Loading...</div>;
@@ -163,10 +210,12 @@ export default class UserSignIn extends Component {
         else 
         {
 
+            // If the user is not signed in, redirect to signin page
             if (redirect) 
             {
                 return <Redirect to='/'/>;
             } 
+            // Check to see if there are validation errors to show in the HTML
             else if (this.state.validationMessages.length > 0)
             {
                 return (
@@ -236,4 +285,4 @@ export default class UserSignIn extends Component {
     }
 }
 
-UserSignIn.contextType = UserContext;
+UserSignIn.contextType = UserContext; // allow UserSignIn to access the context for the user signed in

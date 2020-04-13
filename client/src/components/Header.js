@@ -1,16 +1,21 @@
-// Import react
+// Import supporting files
 import React, {useContext} from "react";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // import Link for router
 
 // Get the user context
 import {UserContext} from './UserContext';
 
+// Create Header component
+
 const Header = () => {
 
+    // Get the user from the context of the app
     const {user} = useContext(UserContext);
    
+    // If the user is logged in
     if (user.isLoggedIn)
-    {        
+    {      
+        // Display proper HTML for users that are logged in  
         return (
             <div className="header">
                 <div className="bounds">
@@ -22,6 +27,7 @@ const Header = () => {
     } 
     else 
     {
+        // Display proper HTML for users that are not logged in
         return (
             <div className="header">
                 <div className="bounds">
@@ -31,7 +37,6 @@ const Header = () => {
         </div>
         );
     }
-    
 }
 
 export default Header;
