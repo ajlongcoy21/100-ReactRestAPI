@@ -258,10 +258,10 @@ router.put('/api/courses/:id', authenticateUser, [
         course = await course.update(
         // set attribute values
         {
-          title: (courseToUpdate.title) ? courseToUpdate.title : courseTitle,
-          description: (courseToUpdate.description) ? courseToUpdate.description : courseDesc,
-          estimatedTime: (courseToUpdate.estimatedTime) ? courseToUpdate.estimatedTime : courseEstimatedTime,
-          materialsNeeded: (courseToUpdate.materialsNeeded) ? courseToUpdate.materialsNeeded : courseMaterialsNeeded
+          title: (courseToUpdate.title) ? courseToUpdate.title : "",
+          description: (courseToUpdate.description) ? courseToUpdate.description : "",
+          estimatedTime: (courseToUpdate.estimatedTime) ? courseToUpdate.estimatedTime : "",
+          materialsNeeded: (courseToUpdate.materialsNeeded) ? courseToUpdate.materialsNeeded : ""
         });
 
         // Set the location and status to 201 Created and end the response.
