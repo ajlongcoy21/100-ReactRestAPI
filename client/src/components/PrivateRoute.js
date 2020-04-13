@@ -8,10 +8,6 @@ function PrivateRoute ({ children, ...rest }) {
 
     const {user} = useContext(UserContext);
 
-    console.log('update ID: ');
-    console.log(children);
-    console.log(rest);
-
     return (
         <Route {...rest} 
             render={({ location }) => 

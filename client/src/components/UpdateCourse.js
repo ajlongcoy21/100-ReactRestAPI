@@ -55,7 +55,7 @@ export default class UpdateCourse extends Component {
         var self = this;
 
         // Initialize error message arrays
-        let seperatedErrorMessages = [];
+        //let seperatedErrorMessages = [];
         let consolidatedErrorMessages = [];
         
         // Make a call to the api for the specific course
@@ -119,7 +119,7 @@ export default class UpdateCourse extends Component {
                     // The request was made and the server responded with a status code that is not in the range of 2xx
 
                     // Seperate the error messages by the newline identification
-                    seperatedErrorMessages = error.response.data.message.split(/(,\n)/);
+                    //seperatedErrorMessages = error.response.data.message.split(/(,\n)/);
 
                     // If the server was not able to not find the course, set the notFound state to true for redirect to notFound Page
                     if (error.response.data.message === 'Course not found. Please search for another course.')

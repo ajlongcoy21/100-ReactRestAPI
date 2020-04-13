@@ -225,8 +225,8 @@ export default class UserSignIn extends Component {
                           <h1>Sign In</h1>
                           <div>
                           <div>
-                            <h2 class="validation--errors--label">Validation errors</h2>
-                                <div class="validation-errors">
+                            <h2 className="validation--errors--label">Validation errors</h2>
+                                <div className="validation-errors">
                                     <ul>
                                         {this.state.validationMessages.map(function(message, index){return <li key={ index }>{message.replace('Validation error: ', '')}</li>;})}
                                     </ul>
