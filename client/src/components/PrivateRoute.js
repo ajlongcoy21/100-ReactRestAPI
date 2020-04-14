@@ -6,7 +6,7 @@ import {UserContext} from './UserContext';
 
 function PrivateRoute ({ children, ...rest }) {
 
-    const {user} = useContext(UserContext);
+    const {user} = useContext(UserContext);    
 
     return (
         <Route {...rest} 

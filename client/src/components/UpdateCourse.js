@@ -342,7 +342,7 @@ export default class UpdateCourse extends Component {
             // If the user is not signed in, redirect to signin page
             if (redirect) 
             {
-                return <Redirect to='/'/>;
+                return <Redirect to={`/courses/${this.props.computedMatch.params.id}`}/>;
             } 
             // Check to see if there are validation errors to show in the HTML
             else if (this.state.validationMessages.length > 0)
