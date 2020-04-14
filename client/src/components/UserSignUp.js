@@ -127,6 +127,7 @@ export default class UserSignUp extends Component {
                 self.setState({validationMessages: consolidatedErrorMessages});
 
                 // If the server responds with a status of 500 set the error state to true for the redirect to error page
+                error.response.status = 500;
                 if (error.response.status === 500) 
                 {
                     self.setState({error: true});
@@ -189,7 +190,7 @@ export default class UserSignUp extends Component {
           if (error.response) 
           {
               // If the server responds with a status of 500 set the error state to true for the redirect to error page
-              
+
               if (error.response.status === 500) 
               {
                   self.setState({error: true});

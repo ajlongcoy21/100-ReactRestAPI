@@ -20,7 +20,7 @@ import UpdateCourse from './components/UpdateCourse';
 
 import Forbidden from './components/Forbidden';
 import NotFound from './components/NotFound';
-import ErrorPage from './components/ErrorPage';
+import UnhandledError from './components/UnhandledError';
 
 import PrivateRoute from './components/PrivateRoute';
 
@@ -51,7 +51,7 @@ function App() {
                 <Route path="/signin" component={UserSignIn}/>
                 <Route path="/signup" component={UserSignUp}/>
                 <Route path="/signout" component={UserSignOut}/>
-                <Route path="/error" component={ErrorPage}/>
+                <Route path="/error" component={UnhandledError}/>
                 <Route path="/forbidden" component={Forbidden}/>
                 <Route path="/notfound" component={NotFound}/>
                 <Route component={NotFound}/>

@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from 'react-router-dom'; // import Link for router
 
-const ErrorPage = () => {
+const UnhandledError = () => {
 
     // Display error page HTML
     // Allow user to go back to homepage
@@ -16,4 +16,4 @@ const ErrorPage = () => {
     
 }
 
-export default ErrorPage;
+export default UnhandledError;
