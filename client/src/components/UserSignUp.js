@@ -103,7 +103,7 @@ export default class UserSignUp extends Component {
         // If they do match
         else
         {
-          axios.post(`http://localhost:5000/api/users`, { firstName: firstName, lastName: lastName, emailAddress: emailAddress, password: password })
+          axios.post(`https://expressrestapi.azurewebsites.net/api/users`, { firstName: firstName, lastName: lastName, emailAddress: emailAddress, password: password })
           .then(function (response) 
           {
             // call sign in function
@@ -168,7 +168,7 @@ export default class UserSignUp extends Component {
       var self = this;
 
         // Make a call to the api for the specific user
-        axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
+        axios.get(`https://expressrestapi.azurewebsites.net/api/users`, {auth: { username: email, password: password }})
         .then(response => {
             
             // Set the context on successful return of user data

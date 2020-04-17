@@ -112,7 +112,7 @@ export default class CreateCourse extends Component {
         if (this.context.user.isLoggedIn) 
         {
             // if the user is logged in, make a call to the API with submitted information and authorization credentials for the user
-            axios.post(`http://localhost:5000/api/courses`, { userId: this.context.user.user.id, title: title, description: description, estimatedTime: estimatedTime, materialsNeeded: materialsNeeded },{ auth:{ username: this.context.user.email, password: this.context.user.password }})
+            axios.post(`https://expressrestapi.azurewebsites.net/api/courses`, { userId: this.context.user.user.id, title: title, description: description, estimatedTime: estimatedTime, materialsNeeded: materialsNeeded },{ auth:{ username: this.context.user.email, password: this.context.user.password }})
             .then(function (response) 
             {
                 // Set the redirect state to true to go back to the homepage                

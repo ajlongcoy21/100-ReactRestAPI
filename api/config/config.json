@@ -1,4 +1,12 @@
 {
   "development": { "dialect": "sqlite", "storage": "fsjstd-restapi.db" },
-  "production": { "dialect": "mssql", "connection": { "server"  : "", "userName": "", "password": "", "options": { "encrypt": true, "database": "" }} }
+  "production": { 
+    "dialect": "mssql", 
+    "connection": { 
+      "server"  : "reactrestapi.database.windows.net", 
+      "userName": "ajlongcoy21", 
+      "password": "Helena1291", 
+      "options": { "encrypt": true, "database": "reactRestAPIDB" }
+    }
+  }
 }

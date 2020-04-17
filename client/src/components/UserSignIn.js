@@ -91,7 +91,7 @@ export default class UserSignIn extends Component {
         let consolidatedErrorMessages = [];
    
         // Make a call to the api for the specific user
-        axios.get(`http://localhost:5000/api/users`, {auth: { username: email, password: password }})
+        axios.get(`https://expressrestapi.azurewebsites.net/api/users`, {auth: { username: email, password: password }})
         .then(response => {
             
             // Set the context on successful return of user data

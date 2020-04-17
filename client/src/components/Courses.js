@@ -26,7 +26,7 @@ export default class Courses extends Component {
         var self = this;
 
         // Make a call to the api for the complete list of courses
-        axios.get(`http://localhost:5000/api/courses`)
+        axios.get(`https://expressrestapi.azurewebsites.net/api/courses`)
         .then(response => {
 
             // Set the state on successful return of courses data

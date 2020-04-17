@@ -163,7 +163,6 @@ router.post('/api/courses', authenticateUser, asyncHandler( async (req, res) => 
 
   console.log(courseToCreate);
   
-
   try 
   {
     // try to create the course and add the course to the course table.
@@ -253,7 +252,7 @@ router.put('/api/courses/:id', authenticateUser, [
         let courseDesc = course.dataValues.description;
         let courseEstimatedTime = course.dataValues.estimatedTime;
         let courseMaterialsNeeded = course.dataValues.materialsNeeded;
-        
+
         // update course
         course = await course.update(
         // set attribute values

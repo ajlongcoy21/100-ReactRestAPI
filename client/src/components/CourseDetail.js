@@ -48,7 +48,7 @@ export default class CourseDetail extends Component {
         let consolidatedErrorMessages = [];
 
         // Make a call to the api for the specific course
-        axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
+        axios.get(`https://expressrestapi.azurewebsites.net/api/courses/${this.props.match.params.id}`)
         .then(response => {
             
             // Set the state on successful return of course data
@@ -126,7 +126,7 @@ export default class CourseDetail extends Component {
         let consolidatedErrorMessages = [];
         
         // Make a call to the api to delete the specific course
-        axios.delete(`http://localhost:5000/api/courses/${this.state.course.id}` , { auth:{ username: this.context.user.email, password: this.context.user.password }})
+        axios.delete(`https://expressrestapi.azurewebsites.net/api/courses/${this.state.course.id}` , { auth:{ username: this.context.user.email, password: this.context.user.password }})
         .then(response => {
 
             // Set the state on successful deletion of course data

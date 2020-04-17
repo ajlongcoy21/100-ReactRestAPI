@@ -59,7 +59,7 @@ export default class UpdateCourse extends Component {
         let consolidatedErrorMessages = [];
         
         // Make a call to the api for the specific course
-        axios.get(`http://localhost:5000/api/courses/${this.props.computedMatch.params.id}`)
+        axios.get(`https://expressrestapi.azurewebsites.net/api/courses/${this.props.computedMatch.params.id}`)
         .then(response => {
 
             // Set the state on successful return of course data
@@ -200,7 +200,7 @@ export default class UpdateCourse extends Component {
         if (this.context.user.isLoggedIn) 
         {
             // if the user is logged in, make a call to the API with submitted information and authorization credentials for the user
-            axios.put(`http://localhost:5000/api/courses/${this.state.courseId}`, { userId: this.context.user.user.id, title: title, description: description, estimatedTime: estimatedTime, materialsNeeded: materialsNeeded },{ auth:{ username: this.context.user.email, password: this.context.user.password }})
+            axios.put(`https://expressrestapi.azurewebsites.net/api/courses/${this.state.courseId}`, { userId: this.context.user.user.id, title: title, description: description, estimatedTime: estimatedTime, materialsNeeded: materialsNeeded },{ auth:{ username: this.context.user.email, password: this.context.user.password }})
             .then(function (response) 
             {
                 // Set the redirect state to true to go back to the homepage
