@@ -4,19 +4,26 @@ const fs = require('fs');
 const path = require('path');
 const { Sequelize } = require('sequelize');
 const config = require('../config/config.json');
+const db = {};
 
 // setup sequelize configuraiton
 
 let sequelize;
 
-if (process.env.NODE_ENV === 'development') 
-{
-  sequelize = new Sequelize(config.development);
-}
-else
-{
-  sequelize = new Sequelize(config.production);
-}
+// if (process.env.NODE_ENV === 'development') 
+// {
+//   sequelize = new Sequelize(config.development);
+// }
+// else
+// {
+  sequelize = new Sequelize('reactRestAPIDB', 'ajlongcoy21', 'Helena1291', {
+        host: 'reactrestapi.database.windows.net',
+        dialect: 'mssql',
+        dialectOptions: {
+          options: { encrypt: true }
+        }
+      });
+// }
 
 const models = {};
 
@@ -41,4 +48,7 @@ sequelize.authenticate()
   .then(function (error) { console.log('Connection has been established successfully.'); })
   .catch(function (error) { console.log('Unable to connect to the database:', err); });
 
-module.exports = {sequelize, models};
+models.sequelize = sequelize;
+models.sequelize = sequelize;
+
+module.exports = models;
